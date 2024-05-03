@@ -5,7 +5,7 @@ import time
 
 from pptx import Presentation
 from pptx.util import Pt
-
+from pptx.dml.color import RGBColor
 
 class DataScraper:
     def __init__(self, url):
@@ -53,6 +53,12 @@ class PresentationCreator:
         title_paragraph = title_placeholder.text_frame.paragraphs[0]
         for run in title_paragraph.runs:
             run.font.size = Pt(title_font_size)
+            run.font.color.rgb = RGBColor(255, 213, 0)
+
+        background = slide.background
+        fill = background.fill
+        fill.solid()
+        fill.fore_color.rgb = RGBColor(0, 14, 40)
 
     def add_text_slide(self, text, text_font_size):
         slide_layout = self.prs.slide_layouts[1]
@@ -63,6 +69,12 @@ class PresentationCreator:
         for paragraph in text_placeholder.text_frame.paragraphs:
             for run in paragraph.runs:
                 run.font.size = Pt(text_font_size)
+                run.font.color.rgb = RGBColor(255, 213, 0)
+
+        background = slide.background
+        fill = background.fill
+        fill.solid()
+        fill.fore_color.rgb = RGBColor(0, 14, 40)
 
     def add_slide(self, title, content, title_font_size, content_font_size):
         slide_layout = self.prs.slide_layouts[1]
@@ -76,10 +88,20 @@ class PresentationCreator:
         title_paragraph = title_placeholder.text_frame.paragraphs[0]
         for run in title_paragraph.runs:
             run.font.size = Pt(title_font_size)
+            run.font.color.rgb = RGBColor(255, 213, 0)
 
         for paragraph in content_placeholder.text_frame.paragraphs:
             for run in paragraph.runs:
                 run.font.size = Pt(content_font_size)
+                run.font.color.rgb = RGBColor(255, 213, 0)
+
+        background = slide.background
+        fill = background.fill
+        fill.solid()
+        fill.fore_color.rgb = RGBColor(0, 14, 40)
+
+
+
 
 
 
@@ -90,14 +112,17 @@ scraper.scrape_data()
 
 presentation_creator = PresentationCreator()
 
-presentation_creator.add_title_slide(scraper.top_title, title_font_size=40)
+presentation_creator.add_title_slide(scraper.top_title[2:], title_font_size=40)
 presentation_creator.add_text_slide(scraper.informss[1], text_font_size=15)
 
 slide1_info = '\n'.join(scraper.informss[2:5])
 presentation_creator.add_slide(scraper.titless[1], slide1_info, title_font_size=20, content_font_size=15)
 
-slide2_info = '\n'.join(scraper.informss[5:12])
-presentation_creator.add_slide(scraper.titless[2], slide2_info, title_font_size=20, content_font_size=10)
+slide2_info = '\n'.join(scraper.informss[5:9])
+presentation_creator.add_slide(scraper.titless[2], slide2_info, title_font_size=20, content_font_size=14)
+
+slide2_info2 = '\n'.join(scraper.informss[9:12])
+presentation_creator.add_text_slide(slide2_info2, text_font_size=15)
 
 slide3_info = '\n'.join(scraper.informss[12:19])
 presentation_creator.add_slide(scraper.titless[3], slide3_info, title_font_size=20, content_font_size=15)
@@ -108,6 +133,7 @@ presentation_creator.add_text_slide(slide3_info2, text_font_size=14)
 slide4_info = '\n'.join(scraper.informss[28:31])
 presentation_creator.add_slide(scraper.informss[27], slide4_info, title_font_size=20, content_font_size=15)
 
+presentation_creator.add_slide('Źródło', 'https://kanga.exchange/university/courses/poziom-podstawowy/lessons/3-satoshi-nakamoto-kim-jest-tworca-bitcoina/', title_font_size=20, content_font_size=15)
 presentation_creator.add_title_slide('Wykonane przez Andrii Kendzor', title_font_size=30)
 presentation_creator.prs.save('Kto jest prawdziwym twórcą Bitcoina (63656).pptx')
 print("success")
